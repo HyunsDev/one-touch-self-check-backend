@@ -14,10 +14,10 @@ var app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
-var corsOptions = {
-  origin: process.env.CLIENT_CORS_URL,
-  credentials: true
-}
+// var corsOptions = {
+//   origin: process.env.CLIENT_CORS_URL,
+//   credentials: true
+// }
 
 // app.use(cors(corsOptions));
 app.use(cors());
