@@ -29,22 +29,31 @@ router.post('/v1/check', async function(req, res, next) {
       }
 
       // 학교 선택
-      const schools = await hcs.searchSchool(req_school)
-      if (schools.length === 0) {
-        res.status(400).json({
-          code: 'schools_not_fount',
-          message: `검색된 학교가 없습니다.. school:${req_school}`
-        })
-        return
+      // const schools = await hcs.searchSchool(req_school)
+      // console.log(schools)
+      // if (schools.length === 0) {
+      //   res.status(400).json({
+      //     code: 'schools_not_fount',
+      //     message: `검색된 학교가 없습니다.. school:${req_school}`
+      //   })
+      //   return
+      // }
+      // if (schools.length > 1) {
+      //   res.status(400).json({
+      //     code: 'schools_too_many',
+      //     message: `검색된 학교가 너무 많습니다. school:${req_school}`
+      //   })
+      //   return
+      // }
+      // const school = schools[0]
+      const school = {
+        name: '서령고등학교',
+        nameEn: 'Seoryeong High School',
+        city: '충청남도',
+        address: '(31965)충청남도 서산시 서령로 117-1 (동문동,서령고등학교)',
+        endpoint: 'cnehcs.eduro.go.kr',
+        schoolCode: 'N100000176'
       }
-      if (schools.length > 1) {
-        res.status(400).json({
-          code: 'schools_too_many',
-          message: `검색된 학교가 너무 많습니다. school:${req_school}`
-        })
-        return
-      }
-      const school = schools[0]
 
       // 1단계 로그인
       const login = await hcs.login(school.endpoint, school.schoolCode, name, birth)
