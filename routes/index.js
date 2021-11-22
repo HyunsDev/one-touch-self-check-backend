@@ -1,6 +1,8 @@
 var express = require('express');
 var router = express.Router();
 const hcs = require('hcs.js')
+const { Webhook, MessageBuilder  } = require('discord-webhook-node');
+const hook = new Webhook(process.env.DISCORD_LOGGER);
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -113,6 +115,14 @@ router.post('/v1/check', async function(req, res, next) {
         Q3: false,
       }
       await hcs.registerSurvey(school.endpoint, secondLogin.token, survey)
+
+      const embed = new MessageBuilder()
+      .setTitle(`${name}(${birth})님이 자가진단을 완료했습니다.`)
+      .setFooter("원터치 자가진단", "https://media.discordapp.net/attachments/912369996737413190/912371380283125770/icon.png")
+      .setColor("#0067f9")
+      .setTimestamp()
+      await hook.send(embed)
+
       res.json({
         code: "self_check_success",
         message: "자가진단을 성공적으로 완료했습니다."
