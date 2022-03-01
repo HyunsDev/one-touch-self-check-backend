@@ -12,3 +12,6 @@
 |wait_please|403|비밀번호 입력 쿨타임|잘못된 비밀번호를 5회이상 입력하여 5분후 재시도 해야 합니다|
 |wrong_password|403|비밀번호 틀림|잘못된 비밀번호를 입력했습니다|
 |self_check_success|200|자가진단 완료|자가진단을 성공적으로 완료했습니다|
+
+# 작동 
+https://www.youtube.com/watch?v=VezLDWlmXfU
