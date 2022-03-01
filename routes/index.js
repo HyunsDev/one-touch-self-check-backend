@@ -8,8 +8,8 @@ const hook = new Webhook(process.env.DISCORD_LOGGER);
 router.get('/', function(req, res, next) {
   res.json({
     result: "원터치 자가진단",
-    version: "v1",
-    last_update: "2021-08-27"
+    version: "v2",
+    last_update: "2022-03-02"
   })
 });
 
@@ -66,6 +66,8 @@ router.post('/v1/check', async function(req, res, next) {
         })
         return
       }
+
+      // 개인정보 약관 동의
       if (login.agreementRequired) {
         await hcs.updateAgreement(school.endpoint, login.token)
       }
@@ -90,9 +92,16 @@ router.post('/v1/check', async function(req, res, next) {
           }
         }
       }
-
       
       if (!secondLogin.success) {
+        if (secondLogin.message) {
+          res.status(403).json({
+            code: 'second_login_failed',
+            message: `2단계 로그인에 실패하였습니다. 비밀번호를 확인해주세요. ${password}`
+          })
+          return
+        }
+
         if (secondLogin.remainingMinutes) {
           res.status(403).json({
             code: 'wait_please',
@@ -101,6 +110,7 @@ router.post('/v1/check', async function(req, res, next) {
           })
           return
         }
+
         res.status(403).json({
           code: 'wrong_password',
           message: `비밀번호가 틀립니다. 다시 시도해주세요. ${password}`,
@@ -111,8 +121,10 @@ router.post('/v1/check', async function(req, res, next) {
 
       const survey = {
         Q1: false,
-        Q2: false,
+        Q2: hcs.CovidQuickTestResult.NONE,
         Q3: false,
+        Q4: false,
+        Q5: false
       }
       await hcs.registerSurvey(school.endpoint, secondLogin.token, survey)
 
